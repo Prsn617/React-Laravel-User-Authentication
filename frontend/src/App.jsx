@@ -1,9 +1,10 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
-import axios from "axios";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
+import Profile from "./components/Profile/Profile";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
+          <Route path="profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </div>

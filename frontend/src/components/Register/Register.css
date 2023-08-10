@@ -22,3 +22,7 @@
   color: red;
   margin-block: -12px 1px;
 }
+
+.loginform a {
+  color: green;
+}

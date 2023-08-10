@@ -1,12 +1,8 @@
-.home {
+.profContainer {
   min-height: 90vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 18px;
-}
-
-.home h2 {
-  margin-bottom: -4px;
+  justify-content: center;
+  gap: 20px;
 }
