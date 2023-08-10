@@ -27,9 +27,10 @@ class UsersController extends Controller
     public function store(Request $req){
         $validator = Validator::make($req->all(), [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'password' => 'required|max:255',
-        ]);
+            'email' => 'required|email|max:255|unique:userlist',
+            'password' => 'required|min:8|max:255',
+        ],
+        ['email.unique' => 'Email already exists']);
 
         if($validator -> fails()){
             return response()->json([
@@ -59,7 +60,7 @@ class UsersController extends Controller
     public function login(Request $req){
         $validator = Validator::make($req->all(), [
             'email' => 'required|email|max:255',
-            'password' => 'required|max:255',
+            'password' => 'required|min:8|max:255',
         ]);
 
         if($validator -> fails()){

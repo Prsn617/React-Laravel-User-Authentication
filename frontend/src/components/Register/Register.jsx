@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Register.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -15,8 +16,13 @@ const Register = () => {
     email: "",
     password: "",
   });
+  const [passError, setPassError] = useState("");
 
-  const postData = async (e, name, email, password) => {
+  const postData = async (e, name, email, password, rePassword) => {
+    if (password !== rePassword) {
+      setPassError("Passwords does not match");
+      return;
+    }
     try {
       const res = await axios.post("http://localhost:8000/api/users", {
         name: name,
@@ -27,7 +33,8 @@ const Register = () => {
       setStatus(res.status);
       e.target.reset();
     } catch (err) {
-      if (err.response.data?.errors) {
+      console.log(err.response);
+      if (err.response?.data?.errors) {
         const newErr = err.response.data.errors;
         setErrors({
           name: newErr.name ?? "",
@@ -54,7 +61,7 @@ const Register = () => {
       rePassword: rePassword,
     }));
 
-    postData(e, name, email, password);
+    postData(e, name, email, password, rePassword);
   };
   return (
     <div>
@@ -67,6 +74,7 @@ const Register = () => {
           <input type="password" name="" placeholder="Password" />
           <p className="error-p">{errors.password}</p>
           <input type="password" name="" placeholder="Re-type Password" />
+          <p className="error-p">{passError}</p>
           <button>Register</button>
         </form>
         <p>
