@@ -1,0 +1,24 @@
+.loginform {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginform form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loginform input,
+.loginform button {
+  min-width: 200px;
+  padding: 0.5em 1em;
+}
+
+.loginform .error-p {
+  color: red;
+  margin-block: -12px 1px;
+}
