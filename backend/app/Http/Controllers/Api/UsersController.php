@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
@@ -42,7 +43,7 @@ class UsersController extends Controller
         $users = Users::create([
             'name' => $req->name,
             'email' => $req->email,
-            'password' => $req->password,
+            'password' => Hash::make($req->password),
         ]);
 
         if($users){
@@ -60,7 +61,7 @@ class UsersController extends Controller
     public function login(Request $req){
         $validator = Validator::make($req->all(), [
             'email' => 'required|email|max:255',
-            'password' => 'required|min:8|max:255',
+            'password' => 'required|max:255',
         ]);
 
         if($validator -> fails()){
@@ -78,8 +79,10 @@ class UsersController extends Controller
             ],404);
         }
 
-        if($user->password !== $req->password){
+        if(!Hash::check($req->password, $user->password)){
             return response()->json([
+                'user' => $user->password,
+                'pass' => Hash::make($req->password),
                 'status' => 422,
                 'errors' => (['password'=>['Password does not match']]),
             ],422);

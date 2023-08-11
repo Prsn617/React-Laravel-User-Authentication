@@ -8,8 +8,7 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [status, setStatus] = useState(0);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const userData = localStorage.getItem("user") || null;
   if (userData) {
@@ -18,7 +17,7 @@ const Login = () => {
 
   const login = async (e, email, password) => {
     try {
-      const res = await axios.post("http://localhost:8000/api/users/login", {
+      const res = await axios.post(`${apiUrl}/api/users/login`, {
         email: email,
         password: password,
       });
@@ -33,6 +32,7 @@ const Login = () => {
       );
       navigate("/profile");
     } catch (err) {
+      console.log(err.response);
       if (err.response.data?.errors) {
         const newErr = err.response.data.errors;
         setErrors({
@@ -60,14 +60,11 @@ const Login = () => {
           <p className="error-p">{errors.email}</p>
           <input type="password" name="" placeholder="Password" />
           <p className="error-p">{errors.password}</p>
-          <button>Register</button>
+          <button>Login</button>
         </form>
         <p>
           Don't have an account? <Link to="/register">Register</Link>
         </p>
-        <b style={{ color: "green" }}>
-          {status === 200 && `User registered successfully`}
-        </b>
       </div>
     </div>
   );

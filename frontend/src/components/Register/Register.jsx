@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import "./Register.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Register = () => {
-  const [registerData, setRegisterData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    rePassword: "",
-  });
-  const [status, setStatus] = useState(0);
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     password: "",
   });
   const [passError, setPassError] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
+
+  const userData = localStorage.getItem("user") || null;
+  if (userData) {
+    navigate("/profile");
+  }
 
   const postData = async (e, name, email, password, rePassword) => {
     if (password !== rePassword) {
@@ -24,14 +24,13 @@ const Register = () => {
       return;
     }
     try {
-      const res = await axios.post("http://localhost:8000/api/users", {
+      const res = await axios.post(`${apiUrl}/api/users`, {
         name: name,
         email: email,
         password: password,
       });
-      console.log(res);
-      setStatus(res.status);
       e.target.reset();
+      navigate("/login");
     } catch (err) {
       console.log(err.response);
       if (err.response?.data?.errors) {
@@ -52,15 +51,6 @@ const Register = () => {
     const password = e.target[2].value ?? "";
     const rePassword = e.target[3].value ?? "";
 
-    console.log(email);
-
-    setRegisterData((prev) => ({
-      name: name,
-      email: email,
-      password: password,
-      rePassword: rePassword,
-    }));
-
     postData(e, name, email, password, rePassword);
   };
   return (
@@ -80,9 +70,6 @@ const Register = () => {
         <p>
           Already have an account? <Link to="/login">Login</Link>
         </p>
-        <b style={{ color: "green" }}>
-          {status === 200 && `User registered successfully`}
-        </b>
       </div>
     </div>
   );
